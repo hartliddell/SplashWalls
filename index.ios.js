@@ -5,7 +5,17 @@
  * @flow
  */
 'use strict';
-import { ActivityIndicator, AppRegistry, Dimensions, PanResponder, StyleSheet, Text, View } from 'react-native';
+import {
+    AlertIOS,
+    ActivityIndicator,
+    AppRegistry,
+    CameraRoll,
+    Dimensions,
+    PanResponder,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 import NetworkImage from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import RandManager from './RandManager';
@@ -34,6 +44,9 @@ class SplashWalls extends Component {
             prevTouchY: 0,
             prevTouchTimeStamp: 0
         };
+        this.currentWallIndex = 0;
+        this.handlePanResponderGrant = this.handlePanResponderGrant.bind(this);
+        this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
     }
 
     componentDidMount() {
@@ -43,16 +56,39 @@ class SplashWalls extends Component {
     componentWillMount() {
         this.imagePanResponder = PanResponder.create({
             onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
-            onPanResponderGrant: this.handlePanResponderGrant.bind(this),
+            onPanResponderGrant: this.handlePanResponderGrant,
             onPanResponderRelease: this.handlePanResponderEnd,
             onPanResponderTerminate: this.handlePanResponderEnd
         });
+    }
+
+    onMomentumScrollEnd(e, state, context) {
+        this.currentWallIndex = state.index;
     }
 
     isDoubleTap(currentTouchTimeStamp, {x0, y0}) {
         var {prevTouchX, prevTouchY, prevTouchTimeStamp} = this.prevTouchInfo;
         var dt = currentTouchTimeStamp - prevTouchTimeStamp;
         return (dt < DOUBLE_TAP_DELAY && Utils.distance(prevTouchX, prevTouchY, x0, y0) < DOUBLE_TAP_RADIUS);
+    }
+
+    saveCurrentWallpaperToCameraRoll() {
+        var {wallsJSON} = this.state;
+        var currentWall = wallsJSON[this.currentWallIndex];
+        var currentWallURL = `https://unsplash.it/${currentWall.width}/${currentWall.height}?image=${currentWall.id}`;
+
+        CameraRoll.saveToCameraRoll(currentWallURL, 'photo',).then(function(result) {
+            console.log('SAVED');
+            AlertIOS.alert(
+              'Saved',
+              'Wallpaper successfully saved to Camera Roll',
+              [
+                {text: 'High 5!', onPress: () => console.log('OK Pressed!')}
+              ]
+            );
+        }, function(err) {
+            console.log('Error saving to camera roll', err);
+        });
     }
 
     handleStartShouldSetPanResponder(e, gestureState) {
@@ -63,9 +99,8 @@ class SplashWalls extends Component {
 
         var currentTouchTimeStamp = Date.now();
 
-        console.log(this);
         if( this.isDoubleTap(currentTouchTimeStamp, gestureState) )
-            console.log('Double tap detected');
+            this.saveCurrentWallpaperToCameraRoll();
 
         this.prevTouchInfo = {
             prevTouchX: gestureState.x0,
@@ -75,7 +110,7 @@ class SplashWalls extends Component {
     }
 
     handlePanResponderEnd(e, gestureState) {
-        console.log('Finger pulled up from the image');
+        // console.log('Finger pulled up from the image');
     }
 
     fetchJallsJSON() {
