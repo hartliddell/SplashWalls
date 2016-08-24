@@ -23,6 +23,7 @@ import Utils from './Utils';
 import React, { Component } from 'react';
 import Swiper from 'react-native-swiper';
 import ProgressHUD from './ProgressHUD.js';
+import ShakeEvent from 'react-native-shake-event-ios';
 
 
 const { width, height } = Dimensions.get('window');
@@ -53,7 +54,7 @@ class SplashWalls extends Component {
     }
 
     componentDidMount() {
-        this.fetchJallsJSON();
+        this.fetchWallsJSON();
     }
 
     componentWillMount() {
@@ -63,6 +64,22 @@ class SplashWalls extends Component {
             onPanResponderRelease: this.handlePanResponderEnd,
             onPanResponderTerminate: this.handlePanResponderEnd
         });
+
+        // Fetch new wallpapers on shake
+        ShakeEvent.addEventListener('shake', () => {
+            this.initialize();
+            this.fetchWallsJSON();
+        });
+    }
+
+    initialize() {
+        this.setState({
+            wallsJSON: [],
+            isLoading: true,
+            isHudVisible: false
+        });
+
+        this.currentWallIndex = 0;
     }
 
     onMomentumScrollEnd(e, state, context) {
@@ -118,7 +135,7 @@ class SplashWalls extends Component {
         // console.log('Finger pulled up from the image');
     }
 
-    fetchJallsJSON() {
+    fetchWallsJSON() {
         var url = 'https://unsplash.it/list';
         fetch(url)
           .then( response => response.json() )

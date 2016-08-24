@@ -25,6 +25,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		FB4358AD1D6CCD9C005FF77F /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB4358A21D6CCD3C005FF77F /* libART.a */; };
 		FBBDE0FE1D6DED8C00BEC349 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB4358B31D6CDD83005FF77F /* libRCTCameraRoll.a */; };
+		FBBDE1101D6DF9C600BEC349 /* libRNShakeEvent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBBDE10F1D6DF9B900BEC349 /* libRNShakeEvent.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,13 @@
 			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
 			remoteInfo = RCTCameraRoll;
 		};
+		FBBDE10E1D6DF9B900BEC349 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FBBDE10A1D6DF9B900BEC349 /* RNShakeEvent.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNShakeEvent;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +153,7 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		FB43589D1D6CCD3C005FF77F /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		FB4358AE1D6CDD83005FF77F /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
+		FBBDE10A1D6DF9B900BEC349 /* RNShakeEvent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShakeEvent.xcodeproj; path = "../node_modules/react-native-shake-event-ios/RNShakeEvent.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBBDE1101D6DF9C600BEC349 /* libRNShakeEvent.a in Frameworks */,
 				FBBDE0FE1D6DED8C00BEC349 /* libRCTCameraRoll.a in Frameworks */,
 				FB4358AD1D6CCD9C005FF77F /* libART.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -284,6 +294,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FBBDE10A1D6DF9B900BEC349 /* RNShakeEvent.xcodeproj */,
 				FB4358AE1D6CDD83005FF77F /* RCTCameraRoll.xcodeproj */,
 				FB43589D1D6CCD3C005FF77F /* ART.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -341,6 +352,14 @@
 			isa = PBXGroup;
 			children = (
 				FB4358B31D6CDD83005FF77F /* libRCTCameraRoll.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FBBDE10B1D6DF9B900BEC349 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FBBDE10F1D6DF9B900BEC349 /* libRNShakeEvent.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -462,6 +481,10 @@
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
+				{
+					ProductGroup = FBBDE10B1D6DF9B900BEC349 /* Products */;
+					ProjectRef = FBBDE10A1D6DF9B900BEC349 /* RNShakeEvent.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -554,6 +577,13 @@
 			fileType = archive.ar;
 			path = libRCTCameraRoll.a;
 			remoteRef = FB4358B21D6CDD83005FF77F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FBBDE10F1D6DF9B900BEC349 /* libRNShakeEvent.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNShakeEvent.a;
+			remoteRef = FBBDE10E1D6DF9B900BEC349 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
