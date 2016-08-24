@@ -22,6 +22,8 @@ import RandManager from './RandManager';
 import Utils from './Utils';
 import React, { Component } from 'react';
 import Swiper from 'react-native-swiper';
+import ProgressHUD from './ProgressHUD.js';
+
 
 const { width, height } = Dimensions.get('window');
 const NUM_WALLPAPERS = 5;
@@ -35,7 +37,8 @@ class SplashWalls extends Component {
 
         this.state = {
           wallsJSON: [],
-          isLoading: true
+          isLoading: true,
+          isHudVisible: false
         };
 
         this.imagePanResponder = {};
@@ -73,18 +76,20 @@ class SplashWalls extends Component {
     }
 
     saveCurrentWallpaperToCameraRoll() {
+        this.setState({isHudVisible: true});
+
         var {wallsJSON} = this.state;
         var currentWall = wallsJSON[this.currentWallIndex];
         var currentWallURL = `https://unsplash.it/${currentWall.width}/${currentWall.height}?image=${currentWall.id}`;
 
-        CameraRoll.saveToCameraRoll(currentWallURL, 'photo',).then(function(result) {
-            console.log('SAVED');
+        CameraRoll.saveToCameraRoll(currentWallURL, 'photo',).then((result) => {
+            this.setState({isHudVisible: false});
             AlertIOS.alert(
-              'Saved',
-              'Wallpaper successfully saved to Camera Roll',
-              [
-                {text: 'High 5!', onPress: () => console.log('OK Pressed!')}
-              ]
+                'Saved',
+                'Wallpaper successfully saved to Camera Roll',
+                [
+                    {text: 'High 5!', onPress: () => console.log('OK Pressed!')}
+                ]
             );
         }, function(err) {
             console.log('Error saving to camera roll', err);
@@ -151,33 +156,36 @@ class SplashWalls extends Component {
     }
 
     renderResults() {
-        var { wallsJSON, isLoading } = this.state;
+        var { wallsJSON, isLoading, isHudVisible } = this.state;
         if (!isLoading) {
             return (
-                <Swiper onMomentumScrollEnd={this.onMomentumScrollEnd}
-                    dot={<View style={{backgroundColor:'rgba(255,255,255,.4)', width: 8, height: 8,borderRadius: 10, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
-                    activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-                    >
-                    {wallsJSON.map((wallpaper, index) => {
-                        return(
-                            <View key={index}>
-                                <NetworkImage
-                                    source={{uri: `https://unsplash.it/${wallpaper.width}/${wallpaper.height}?image=${wallpaper.id}`}}
-                                    indicator={Progress.Circle}
-                                    style={styles.wallpaperImage}
-                                    indicatorProps={{
-                                        color: 'rgba(255, 255, 255)',
-                                        size: 60,
-                                        thickness: 7
-                                    }}
-                                    {...this.imagePanResponder.panHandlers}>
-                                    <Text style={styles.label}>Photo by</Text>
-                                    <Text style={styles.label_authorName}>{wallpaper.author}</Text>
-                                </NetworkImage>
-                            </View>
-                        );
-                    })}
-                </Swiper>
+                <View>
+                    <Swiper onMomentumScrollEnd={this.onMomentumScrollEnd}
+                        index={this.currentWallIndex}
+                        dot={<View style={{backgroundColor:'rgba(255,255,255,.4)', width: 8, height: 8,borderRadius: 10, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
+                        activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}>
+                        {wallsJSON.map((wallpaper, index) => {
+                            return(
+                                <View key={index}>
+                                    <NetworkImage
+                                        source={{uri: `https://unsplash.it/${wallpaper.width}/${wallpaper.height}?image=${wallpaper.id}`}}
+                                        indicator={Progress.Circle}
+                                        style={styles.wallpaperImage}
+                                        indicatorProps={{
+                                            color: 'rgba(255, 255, 255)',
+                                            size: 60,
+                                            thickness: 7
+                                        }}
+                                        {...this.imagePanResponder.panHandlers}>
+                                        <Text style={styles.label}>Photo by</Text>
+                                        <Text style={styles.label_authorName}>{wallpaper.author}</Text>
+                                    </NetworkImage>
+                                </View>
+                            );
+                        })}
+                    </Swiper>
+                    <ProgressHUD width={width} height={height} isVisible={isHudVisible}/>
+                </View>
             );
         }
     }
